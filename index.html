@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Padilla App | Descubre Riohacha</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+window.FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyCgeYtv7xUazS9bBiBchDdv51aaveyrMtE",
+  authDomain:        "monumento-padilla.firebaseapp.com",
+  projectId:         "monumento-padilla",
+  storageBucket:     "monumento-padilla.firebasestorage.app",
+  messagingSenderId: "844031272820",
+  appId:             "1:844031272820:web:67d0de439e855279092e21",
+  measurementId:     "G-LGNEY85WPV"
+};
+window._fbReady = false;
+const s = document.createElement('script');
+s.type = 'module';
+s.textContent = `
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot,
+           query, orderBy, serverTimestamp, doc, setDoc, getDoc }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getStorage, ref, uploadString, getDownloadURL }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+  try {
+    const app  = initializeApp(window.FIREBASE_CONFIG);
+    const db   = getFirestore(app);
+    const stor = getStorage(app);
+    window._fb = {
+      db, stor,
+      collection, addDoc, onSnapshot, query, orderBy, serverTimestamp,
+      doc, setDoc, getDoc,
+      ref, uploadString, getDownloadURL
+    };
+    window._fbReady = true;
+    console.log("✅ Firebase conectado");
+  } catch(e) { console.warn("⚠️ Firebase error:", e.message); }
+`;
+document.head.appendChild(s);
+</script>
+
+<style>
+:root {
+  --app-bg: #F8FAFC;
+  --card-bg: #FFFFFF;
+  --text-dark: #1E293B;
+  --text-light: #64748B;
+  --border-color: #E2E8F0;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --chat-bot-bg: #F1F5F9;
+  --gradient-primary: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+  --gradient-ocean: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+}
+body.dark-mode {
+  --app-bg: #0F172A;
+  --card-bg: #1E293B;
+  --text-dark: #F8FAFC;
+  --text-light: #94A3B8;
+  --border-color: #334155;
+  --glass-bg: rgba(30, 41, 59, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --chat-bot-bg: #334155;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; transition: background-color 0.3s, color 0.3s; }
+body, html { height: 100%; width: 100%; background: var(--app-bg); color: var(--text-dark); overflow: hidden; }
+.hidden { display: none !important; }
+.fade-in { animation: fadeIn 0.5s ease forwards; }
+.slide-up-smooth { animation: slideUpSmooth 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUpSmooth { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(255, 75, 43, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0); } }
+@keyframes panBackground { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============================================================
+   TERMINAL ADMIN — estilo macOS/GitHub
+============================================================ */
+#cmd-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.80);
+  backdrop-filter: blur(14px); display: none; justify-content: center;
+  align-items: center; z-index: 9999;
+}
+#cmd-box {
+  background: #0d1117; border: 1px solid #30363d; border-radius: 12px;
+  width: 440px; max-width: 92vw; overflow: hidden;
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+}
+#cmd-titlebar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px; background: #161b22; border-bottom: 1px solid #30363d;
+}
+.cmd-dot { width: 12px; height: 12px; border-radius: 50%; }
+.cmd-dot.red   { background: #ff5f57; }
+.cmd-dot.amber { background: #febc2e; }
+.cmd-dot.green { background: #28c840; }
+#cmd-titlebar-label {
+  flex: 1; text-align: center; font-size: 12px; color: #8b949e;
+  letter-spacing: 0.3px; font-family: monospace;
+}
+#cmd-body { padding: 18px 20px 20px; }
+.cmd-meta { color: #8b949e; font-size: 12px; margin-bottom: 3px; }
+.cmd-sep  { margin-bottom: 16px; }
+#cmd-input-wrap {
+  display: flex; align-items: center; gap: 8px;
+  background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+  padding: 12px 14px; margin-top: 18px;
+}
+#cmd-input-wrap .prompt { color: #3fb950; font-size: 14px; user-select: none; white-space: nowrap; }
+#cmd-input {
+  flex: 1; background: none; border: none; outline: none;
+  color: #e6edf3; font-family: 'Courier New', Courier, monospace;
+  font-size: 14px; caret-color: #58a6ff;
+}
+#cmd-hint { margin-top: 10px; font-size: 11px; color: #484f58; font-family: monospace; }
+#cmd-error {
+  margin-top: 10px; font-size: 12px; font-family: monospace;
+  color: #ffa657; background: rgba(255,166,87,0.08);
+  border-left: 2px solid #ffa657; padding: 8px 12px;
+  border-radius: 0 4px 4px 0; display: none;
+}
+
+/* ============================================================
+   THEME TOGGLE
+============================================================ */
+.theme-toggle-btn {
+  position: fixed; top: 20px; right: 20px; width: 45px; height: 45px;
+  background: var(--glass-bg); backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border); border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  font-size: 1.2rem; color: var(--text-dark); z-index: 90;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s;
+}
+.theme-toggle-btn:active { transform: scale(0.9); }
+
+/* ============================================================
+   GATEWAY
+============================================================ */
+#gateway-screen {
+  position: absolute; inset: 0; z-index: 100;
+  background: linear-gradient(-45deg, #0F172A, #1E293B, #0F172A, #2193b0);
+  background-size: 400% 400%; animation: panBackground 15s ease infinite;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.gateway-backdrop {
+  position: absolute; inset: 0;
+  background: url('https://upload.wikimedia.org/wikipedia/commons/4/4e/Riohacha_-_La_Guajira.jpg') center/cover;
+  opacity: 0.3; mix-blend-mode: overlay;
+}
+.gateway-content {
+  position: relative; z-index: 2; padding: 40px 30px;
+  background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-top-left-radius: var(--radius-xl); border-top-right-radius: var(--radius-xl);
+  border-top: 1px solid rgba(255,255,255,0.1); box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+}
+.gateway-header { text-align: center; margin-bottom: 30px; }
+.gateway-header i { font-size: 3rem; color: #FF4B2B; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(255,75,43,0.5)); }
+.gateway-header h1 { color: #ffffff; font-size: 2.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 5px; }
+.gateway-header p { color: rgba(255,255,255,0.8); font-size: 0.95rem; }
+.app-input {
+  width: 100%; padding: 18px; border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05); color: #fff; font-size: 1rem;
+  margin-bottom: 15px; outline: none; appearance: none; cursor: pointer; transition: 0.3s;
+}
+.app-input option { background: #1E293B; color: #fff; }
+.app-input:focus { background: rgba(255,255,255,0.15); border-color: #FF4B2B; }
+.btn-epic {
+  width: 100%; padding: 20px; border-radius: 30px; border: none;
+  background: var(--gradient-primary); color: #fff; font-size: 1.1rem;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  box-shadow: 0 10px 25px rgba(255, 75, 43, 0.4); cursor: pointer; transition: 0.3s;
+  animation: pulseGlow 2.5s infinite; margin-top: 10px;
+}
+.btn-epic:active { transform: scale(0.96); }
+.btn-epic:disabled { opacity: 0.7; cursor: not-allowed; animation: none; }
+
+/* ============================================================
+   APP SCREEN
+============================================================ */
+#app-screen { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.view-section { flex: 1; overflow-y: auto; padding-bottom: 90px; }
+.monument-card {
+  margin: 15px; margin-top: 80px; background: var(--card-bg);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.08); overflow: hidden; position: relative;
+}
+.card-image-box { position: relative; height: 55vh; width: 100%; background: #0F172A; }
+.card-image-box img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
+.card-image-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 70%);
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 25px;
+}
+.card-badge {
+  position: absolute; top: 20px; left: 20px;
+  background: rgba(255,255,255,0.25); backdrop-filter: blur(10px);
+  padding: 8px 16px; border-radius: 20px; color: #fff; font-size: 0.8rem;
+  font-weight: 600; border: 1px solid rgba(255,255,255,0.3);
+}
+.play-fab {
+  position: absolute; right: 25px; bottom: -30px; width: 65px; height: 65px;
+  background: var(--gradient-primary); border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  color: #fff; font-size: 1.6rem;
+  box-shadow: 0 10px 25px rgba(255, 75, 43, 0.4); cursor: pointer; z-index: 10;
+  border: none; transition: 0.3s;
+}
+.play-fab:active { transform: scale(0.9); }
+.play-fab.playing { animation: pulseGlow 1.5s infinite; background: var(--text-dark); }
+.card-details { padding: 40px 25px 30px; }
+.card-title { font-size: 2.2rem; font-weight: 800; color: var(--text-dark); line-height: 1.1; margin-bottom: 5px; }
+.card-subtitle { font-size: 1rem; color: #FF4B2B; font-weight: 600; margin-bottom: 20px; }
+.info-pills { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.pill {
+  padding: 8px 16px; background: var(--app-bg); border-radius: 20px;
+  border: 1px solid var(--border-color); font-size: 0.85rem; font-weight: 600;
+  color: var(--text-dark); display: flex; align-items: center; gap: 6px;
+}
+.pill i { color: #FF4B2B; }
+.card-desc { font-size: 1.05rem; color: var(--text-light); line-height: 1.7; text-align: justify; }
+
+/* ============================================================
+   CHAT
+============================================================ */
+#view-chat { background: var(--card-bg); height: 100%; display: flex; flex-direction: column; }
+.chat-header-epic {
+  padding: 30px 20px 20px; background: var(--gradient-ocean); color: #fff;
+  border-bottom-left-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg);
+  display: flex; align-items: center; gap: 15px;
+  box-shadow: 0 10px 20px rgba(33, 147, 176, 0.2);
+}
+.chat-avatar {
+  width: 55px; height: 55px; background: #fff; border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  font-size: 1.5rem; color: #2193b0;
+}
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 20px;
+  display: flex; flex-direction: column; gap: 15px; padding-bottom: 120px;
+}
+.msg {
+  max-width: 80%; padding: 14px 20px; border-radius: 20px;
+  font-size: 0.95rem; line-height: 1.5; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.msg.bot { background: var(--chat-bot-bg); color: var(--text-dark); align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg.user { background: var(--gradient-ocean); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+.chat-input-area {
+  position: fixed; bottom: 85px; left: 15px; right: 15px;
+  background: var(--glass-bg); backdrop-filter: blur(10px);
+  padding: 10px; border-radius: 30px; display: flex; gap: 10px;
+  border: 1px solid var(--border-color);
+}
+.chat-input-area input {
+  flex: 1; padding: 15px 20px; border-radius: 30px; border: none;
+  background: transparent; color: var(--text-dark); outline: none; font-size: 0.95rem;
+}
+.chat-input-area button {
+  width: 50px; height: 50px; border-radius: 50%; border: none;
+  background: var(--gradient-ocean); color: #fff; font-size: 1.2rem;
+  display: flex; justify-content: center; align-items: center; cursor: pointer;
+}
+
+/* ============================================================
+   BOTTOM NAV
+============================================================ */
+.bottom-nav {
+  position: fixed; bottom: 15px; left: 15px; right: 15px; height: 70px;
+  background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  border-radius: 35px; display: flex; justify-content: space-around; align-items: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 50; border: 1px solid var(--glass-border);
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: var(--text-light); cursor: pointer; width: 60px; height: 60px;
+  border-radius: 50%; transition: 0.3s;
+}
+.nav-item i { font-size: 1.4rem; margin-bottom: 2px; transition: 0.3s; }
+.nav-item span { font-size: 0.65rem; font-weight: 600; }
+.nav-item.active { color: #FF4B2B; }
+.nav-item.active i { transform: translateY(-4px); font-size: 1.5rem; }
+
+/* ============================================================
+   ADMIN SCREEN
+============================================================ */
+#admin-screen {
+  position: fixed; inset: 0; background: var(--app-bg); z-index: 200;
+  display: none; flex-direction: row;
+}
+.admin-sidebar {
+  width: 260px; background: var(--card-bg); border-right: 1px solid var(--border-color);
+  display: flex; flex-direction: column; padding: 20px 0; z-index: 210;
+  box-shadow: 2px 0 15px rgba(0,0,0,0.05);
+}
+.admin-sidebar-logo {
+  padding: 0 20px 20px; border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px; text-align: center;
+}
+.admin-sidebar-logo h2 {
+  font-size: 1.4rem; font-weight: 800;
+  background: var(--gradient-ocean); -webkit-background-clip: text; color: transparent;
+}
+.admin-sidebar-menu { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 0 15px; }
+.admin-sidebar-item {
+  padding: 14px 20px; border-radius: 12px; cursor: pointer; font-weight: 600;
+  color: var(--text-light); transition: 0.3s; display: flex; align-items: center; gap: 12px;
+}
+.admin-sidebar-item i { font-size: 1.2rem; width: 20px; text-align: center; }
+.admin-sidebar-item:hover { background: var(--app-bg); color: #2193b0; }
+.admin-sidebar-item.active {
+  background: var(--gradient-ocean); color: #fff;
+  box-shadow: 0 5px 15px rgba(33, 147, 176, 0.3);
+}
+.admin-sidebar-footer {
+  padding: 20px; border-top: 1px solid var(--border-color);
+  display: flex; gap: 10px; justify-content: center;
+}
+.btn-close-admin {
+  background: var(--app-bg); border: 1px solid var(--border-color);
+  width: 45px; height: 45px; border-radius: 50%; color: var(--text-dark);
+  font-size: 1.2rem; cursor: pointer; transition: 0.3s;
+}
+.btn-close-admin:hover { background: #FF4B2B; color: #fff; }
+.admin-main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: var(--app-bg); }
+.admin-body { padding: 30px; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+@media (max-width: 768px) {
+  #admin-screen { flex-direction: column; }
+  .admin-sidebar {
+    width: 100%; height: auto; flex-direction: row; align-items: center;
+    padding: 10px; border-right: none; border-bottom: 1px solid var(--border-color);
+  }
+  .admin-sidebar-logo { display: none; }
+  .admin-sidebar-menu {
+    flex-direction: row; overflow-x: auto; flex: 1;
+    padding: 0 5px; gap: 5px;
+  }
+  .admin-sidebar-item { padding: 10px 15px; font-size: 0.85rem; white-space: nowrap; }
+  .admin-sidebar-footer {
+    padding: 0 10px; border-top: none; border-left: 1px solid var(--border-color);
+  }
+}
+
+/* ============================================================
+   KPI / CHARTS / TABLE
+============================================================ */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+.kpi-card {
+  background: var(--card-bg); padding: 20px; border-radius: var(--radius-lg);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.03); text-align: center;
+  border: 1px solid var(--border-color);
+}
+.kpi-title { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+.kpi-val { font-size: 2.2rem; font-weight: 800; color: var(--text-dark); }
+.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 25px; }
+.chart-card {
+  background: var(--card-bg); padding: 20px; border-radius: var(--radius-lg);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.03); border: 1px solid var(--border-color);
+}
+.chart-card h3 { font-size: 1.1rem; margin-bottom: 15px; color: var(--text-dark); font-weight: 700; }
+.chart-wrap { position: relative; height: 250px; }
+.table-responsive {
+  overflow-x: auto; background: var(--card-bg); border-radius: var(--radius-lg);
+  padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+  margin-bottom: 30px; border: 1px solid var(--border-color);
+}
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th {
+  padding: 12px; border-bottom: 2px solid var(--border-color);
+  color: var(--text-light); font-size: 0.8rem; text-transform: uppercase;
+}
+td {
+  padding: 12px; border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem; font-weight: 500; color: var(--text-dark);
+}
+
+/* ============================================================
+   CMS — mejorado con soporte Firebase Storage
+============================================================ */
+.cms-form { max-width: 600px; margin: 0 auto; }
+.cms-group { margin-bottom: 20px; }
+.cms-group label {
+  display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-light);
+  margin-bottom: 8px; text-transform: uppercase;
+}
+.cms-input {
+  width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);
+  background: var(--app-bg); outline: none; font-size: 1rem; color: var(--text-dark);
+  font-family: 'Poppins', sans-serif; transition: 0.3s;
+}
+.cms-input:focus { border-color: #2193b0; background: var(--card-bg); }
+.cms-textarea { resize: vertical; min-height: 150px; }
+.upload-area {
+  border: 2px dashed var(--text-light); border-radius: 16px; padding: 30px;
+  text-align: center; cursor: pointer; transition: 0.3s; background: var(--app-bg);
+  position: relative;
+}
+.upload-area:hover { border-color: #2193b0; }
+.upload-area i { font-size: 2.5rem; color: var(--text-light); margin-bottom: 10px; }
+.upload-area p { font-weight: 600; color: var(--text-dark); }
+.upload-area small { color: var(--text-light); font-size: 0.8rem; }
+
+/* Progress bar de subida */
+.upload-progress {
+  position: absolute; bottom: 0; left: 0; height: 4px;
+  background: var(--gradient-ocean); border-radius: 0 0 14px 14px;
+  width: 0; transition: width 0.3s; display: none;
+}
+.upload-progress.visible { display: block; }
+
+#cms-img-preview {
+  width: 100%; max-height: 300px; object-fit: cover;
+  border-radius: 12px; margin-top: 15px; display: none;
+}
+
+/* Indicador de estado de guardado */
+.cms-status {
+  display: flex; align-items: center; gap: 10px; padding: 14px 20px;
+  border-radius: 12px; font-size: 0.9rem; font-weight: 600;
+  margin-top: 15px; display: none;
+}
+.cms-status.loading { background: rgba(33,147,176,0.1); color: #2193b0; border: 1px solid rgba(33,147,176,0.2); }
+.cms-status.success { background: rgba(34,197,94,0.1); color: #16a34a; border: 1px solid rgba(34,197,94,0.2); }
+.cms-status.error { background: rgba(239,68,68,0.1); color: #dc2626; border: 1px solid rgba(239,68,68,0.2); }
+.cms-status i { font-size: 1.1rem; }
+.cms-spin { animation: spin 1s linear infinite; display: inline-block; }
+
+/* ============================================================
+   MODALES
+============================================================ */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px); display: none; justify-content: center;
+  align-items: center; z-index: 300;
+}
+.modal-card {
+  background: var(--card-bg); padding: 35px 30px; border-radius: var(--radius-xl);
+  width: 90%; max-width: 350px; text-align: center; position: relative;
+  border: 1px solid var(--border-color);
+}
+.modal-card input { background: var(--app-bg); color: var(--text-dark); border: 1px solid var(--border-color); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     TERMINAL ADMIN  (Ctrl+Shift+A desde el gateway)
+     Contraseña: Admin123
+============================================================ -->
+<div id="cmd-overlay">
+  <div id="cmd-box">
+    <div id="cmd-titlebar">
+      <div class="cmd-dot red"></div>
+      <div class="cmd-dot amber"></div>
+      <div class="cmd-dot green"></div>
+      <span id="cmd-titlebar-label">padilla-app — admin access</span>
+    </div>
+    <div id="cmd-body">
+      <div class="cmd-meta">Last login: <span id="cmd-lastlogin"></span></div>
+      <div class="cmd-meta cmd-sep">Riohacha, La Guajira — Colombia</div>
+      <div id="cmd-input-wrap">
+        <span class="prompt">padilla@app:~$&nbsp;</span>
+        <input type="password" id="cmd-input" placeholder="ingresa el comando..." autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div id="cmd-error">⚠ Acceso denegado. Comando incorrecto.</div>
+      <div id="cmd-hint">Enter para confirmar &nbsp;·&nbsp; Esc para cancelar</div>
+    </div>
+  </div>
+</div>
+
+<button id="theme-toggle" class="theme-toggle-btn" onclick="toggleTheme()" title="Modo Oscuro/Claro">
+  <i class="fa-solid fa-moon"></i>
+</button>
+
+<!-- ============================================================
+     GATEWAY
+============================================================ -->
+<div id="gateway-screen">
+  <div class="gateway-backdrop"></div>
+  <div class="gateway-content slide-up-smooth">
+    <div class="gateway-header">
+      <i class="fa-solid fa-compass"></i>
+      <h1>Descubre<br>Riohacha</h1>
+      <p>Cultura e historia en la palma de tu mano.</p>
+    </div>
+    <form id="form-ingreso">
+      <select id="v-edad" class="app-input" required>
+        <option value="" disabled selected>¿Cuál es tu rango de edad?</option>
+        <option>Menor de 18 años</option><option>18 a 25 años</option>
+        <option>26 a 35 años</option><option>36 a 45 años</option>
+        <option>46 a 60 años</option><option>Mayor de 60 años</option>
+      </select>
+      <select id="v-proc" class="app-input" required>
+        <option value="" disabled selected>¿De dónde nos visitas?</option>
+        <option>Riohacha</option><option>Otro municipio de La Guajira</option>
+        <option>Otro departamento de Colombia</option><option>Extranjero</option>
+      </select>
+      <select id="v-tipo" class="app-input" required>
+        <option value="" disabled selected>¿Cuál es tu perfil?</option>
+        <option>Turista</option><option>Residente</option><option>Estudiante</option>
+        <option>Investigador</option><option>Otro</option>
+      </select>
+      <button type="submit" class="btn-epic" id="btn-entrar">Ingresar</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP SCREEN
+============================================================ -->
+<div id="app-screen" class="hidden">
+  <!-- MONUMENTO -->
+  <div id="view-monument" class="view-section fade-in">
+    <div class="monument-card">
+      <div class="card-image-box">
+        <img id="main-monument-img"
+             src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Riohacha_-_La_Guajira.jpg"
+             alt="Padilla">
+        <div class="card-badge"><i class="fa-solid fa-star"></i> Patrimonio Visual</div>
+        <div class="card-image-overlay">
+          <h2 id="main-monument-title" style="color:#fff; font-size:2.5rem; font-weight:800; line-height:1;">
+            Almirante<br>Padilla
+          </h2>
+        </div>
+        <button class="play-fab" id="btn-audio" onclick="narrarVozMasculina(this)">
+          <i class="fa-solid fa-play" style="margin-left: 4px;"></i>
+        </button>
+      </div>
+      <div class="card-details">
+        <div class="card-subtitle" id="main-monument-subtitle">Héroe Naval de la Independencia</div>
+        <div class="info-pills">
+          <div class="pill"><i class="fa-solid fa-location-dot"></i> Plaza Padilla, Riohacha</div>
+          <div class="pill"><i class="fa-solid fa-palette"></i> Estatua en Bronce</div>
+        </div>
+        <div class="card-desc" id="main-monument-desc">
+          El Almirante José Prudencio Padilla es el máximo héroe naval de Colombia. Nacido en Camarones en 1784, comandó la flota patriota hacia la victoria absoluta en la Batalla Naval del Lago de Maracaibo en 1823.<br><br>
+          Esta imponente estatua no solo recuerda sus invaluables hazañas militares, sino que simboliza el valor, la identidad mestiza y el espíritu indomable del pueblo de La Guajira frente a la adversidad.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div id="view-chat" class="view-section hidden">
+    <div class="chat-header-epic">
+      <div class="chat-avatar"><i class="fa-solid fa-robot"></i></div>
+      <div>
+        <h2 style="font-size:1.2rem; font-weight:700;">Historiador Virtual</h2>
+        <p style="font-size:0.8rem; opacity:0.9;">
+          <i class="fa-solid fa-circle" style="color:#4ade80; font-size:0.5rem;"></i> En línea ahora
+        </p>
+      </div>
+    </div>
+    <div class="chat-messages" id="chat-historia">
+      <div class="msg bot fade-in">
+        ¡Hola! Has hecho *Match* con la historia. Soy un experto en la vida del Almirante Padilla y la cultura Guajira. ¿Qué te gustaría saber hoy?
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="ai-input" placeholder="Pregunta algo épico..."
+             onkeydown="if(event.key==='Enter') consultarIA()">
+      <button onclick="consultarIA()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="switchView('view-monument', this)">
+      <i class="fa-solid fa-layer-group"></i>
+      <span>Descubrir</span>
+    </div>
+    <div class="nav-item" onclick="switchView('view-chat', this)">
+      <i class="fa-solid fa-comment-dots"></i>
+      <span>Chat IA</span>
+    </div>
+  </nav>
+</div>
+
+<!-- ============================================================
+     DASHBOARD ADMIN
+============================================================ -->
+<div id="admin-screen">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">
+      <h2>Panel Admin</h2>
+    </div>
+    <div class="admin-sidebar-menu">
+      <div class="admin-sidebar-item active" onclick="switchAdminTab('stats', this)">
+        <i class="fa-solid fa-chart-pie"></i> Estadísticas
+      </div>
+      <div class="admin-sidebar-item" onclick="switchAdminTab('history', this)">
+        <i class="fa-solid fa-users"></i> Historial Real
+      </div>
+      <div class="admin-sidebar-item" onclick="switchAdminTab('content', this)">
+        <i class="fa-solid fa-pen-to-square"></i> Gestión (CMS)
+      </div>
+    </div>
+    <div class="admin-sidebar-footer">
+      <button class="btn-close-admin" onclick="abrirModalQR()" title="Código QR">
+        <i class="fa-solid fa-qrcode"></i>
+      </button>
+      <button class="btn-close-admin" onclick="cerrarAdmin()" title="Cerrar Admin">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-body">
+
+      <!-- ESTADÍSTICAS -->
+      <div id="admin-section-stats">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-title">Visitas Totales</div>
+            <div class="kpi-val" id="k-total">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Visitas de este Monumento</div>
+            <div class="kpi-val" id="k-monumento">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Edad Predominante (Moda)</div>
+            <div class="kpi-val" id="k-moda-edad" style="font-size:1.2rem;">-</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Procedencia (Moda)</div>
+            <div class="kpi-val" id="k-moda-proc" style="font-size:1.2rem;">-</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Perfil Visitante (Moda)</div>
+            <div class="kpi-val" id="k-moda-tipo" style="font-size:1.2rem;">-</div>
+          </div>
+        </div>
+        <div class="charts-grid">
+          <div class="chart-card"><h3>Rango de Edades</h3><div class="chart-wrap"><canvas id="chart-edades"></canvas></div></div>
+          <div class="chart-card"><h3>Distribución Origen</h3><div class="chart-wrap"><canvas id="chart-proc"></canvas></div></div>
+          <div class="chart-card"><h3>Cruce: Edad vs Procedencia</h3><div class="chart-wrap"><canvas id="chart-cruce"></canvas></div></div>
+        </div>
+        <div class="table-responsive">
+          <h3 style="margin-bottom:15px; color:var(--text-dark);">Análisis Descriptivo (Frecuencias)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Variable</th><th>Clase (Xi)</th><th>Frecuencia (fi)</th>
+                <th>Relativa (hi)</th><th>% Porcentaje</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-frecuencias"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div id="admin-section-history" class="hidden fade-in">
+        <div class="table-responsive">
+          <h3 style="margin-bottom:15px; color:var(--text-dark);">
+            <i class="fa-solid fa-users"></i> Registro de Visitas (Tiempo Real)
+          </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th><th>Hora</th><th>Monumento</th>
+                <th>Edad</th><th>Procedencia</th><th>Perfil</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-registros"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CMS -->
+      <div id="admin-section-content" class="hidden fade-in">
+        <div class="chart-card cms-form">
+          <h3 style="margin-bottom:5px; font-size:1.5rem; font-weight:800; color:var(--text-dark);">
+            Editar Monumento
+          </h3>
+          <p style="font-size:0.9rem; color:var(--text-light); margin-bottom:25px;">
+            Los cambios se sincronizan en <strong>todos los dispositivos</strong> en tiempo real vía Firebase.
+          </p>
+
+          <!-- Imagen -->
+          <div class="cms-group">
+            <label>Fotografía Principal</label>
+            <div class="upload-area" id="upload-area" onclick="document.getElementById('cms-file').click()">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <p>Toca para subir imagen</p>
+              <small>La foto se sube a Firebase Storage automáticamente</small>
+              <div class="upload-progress" id="upload-progress"></div>
+            </div>
+            <input type="file" id="cms-file" class="hidden" accept="image/*"
+                   onchange="subirImagenStorage(this)">
+            <img id="cms-img-preview" src="" alt="Previsualización">
+          </div>
+
+          <!-- Campos de texto -->
+          <div class="cms-group">
+            <label>Nombre del Monumento</label>
+            <input type="text" id="cms-title" class="cms-input" placeholder="Ej: Almirante Padilla">
+          </div>
+          <div class="cms-group">
+            <label>Subtítulo o Etiqueta</label>
+            <input type="text" id="cms-subtitle" class="cms-input" placeholder="Ej: Héroe Naval">
+          </div>
+          <div class="cms-group">
+            <label>Historia Detallada</label>
+            <textarea id="cms-desc" class="cms-input cms-textarea" placeholder="Escribe la historia aquí..."></textarea>
+          </div>
+
+          <!-- Botón guardar -->
+          <button class="btn-epic" id="btn-cms-guardar"
+                  style="background: var(--gradient-ocean); animation: none;"
+                  onclick="guardarContenidoCMS()">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar y Sincronizar
+          </button>
+
+          <!-- Estado del guardado -->
+          <div class="cms-status" id="cms-status"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Modal QR -->
+<div id="modal-qr" class="modal-overlay">
+  <div class="modal-card fade-in">
+    <button style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:1.2rem; color:var(--text-light); cursor:pointer;" onclick="cerrarModal('modal-qr')">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <h3 style="margin-bottom:15px; color:var(--text-dark);">Código QR del Sitio</h3>
+    <div id="qr-container" style="display:flex; justify-content:center; margin-bottom:20px; padding:15px; background:#fff; border-radius:15px; box-shadow:0 10px 20px rgba(0,0,0,0.1);"></div>
+    <p id="qr-url-label" style="font-size:0.75rem; color:var(--text-light); margin-bottom:15px; word-break:break-all;"></p>
+    <button class="btn-epic" style="padding:12px; font-size:1rem; border-radius:15px; background:var(--gradient-ocean); animation:none;" onclick="descargarQR()">
+      <i class="fa-solid fa-download"></i> Guardar Imagen
+    </button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// TEMA CLARO / OSCURO
+// ============================================================
+let isDarkMode = false;
+function toggleTheme() {
+  const body = document.body;
+  const icon = document.querySelector('#theme-toggle i');
+  if (isDarkMode) {
+    body.classList.remove('dark-mode');
+    icon.classList.replace('fa-sun', 'fa-moon');
+    isDarkMode = false;
+  } else {
+    body.classList.add('dark-mode');
+    icon.classList.replace('fa-moon', 'fa-sun');
+    isDarkMode = true;
+  }
+  if (document.getElementById('admin-screen').style.display === 'flex') iniciarEstadisticas();
+}
+
+// ============================================================
+// UTILIDAD: esperar a Firebase
+// ============================================================
+function waitForFirebase() {
+  return new Promise(resolve => {
+    if (window._fbReady) return resolve();
+    const iv = setInterval(() => {
+      if (window._fbReady) { clearInterval(iv); resolve(); }
+    }, 200);
+  });
+}
+
+// ============================================================
+// CMS — CARGA DESDE FIRESTORE (con fallback localStorage)
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  cargarContenidoCMS();
+});
+
+async function cargarContenidoCMS() {
+  // 1. Fallback inmediato desde localStorage
+  const cache = localStorage.getItem('padilla_cms_data');
+  if (cache) {
+    try { aplicarContenidoCMS(JSON.parse(cache)); } catch(e) {}
+  }
+
+  // 2. Sobreescribe con Firestore en cuanto esté disponible
+  try {
+    await waitForFirebase();
+    const { db, doc, getDoc } = window._fb;
+    const snap = await getDoc(doc(db, 'cms', 'monumento'));
+    if (snap.exists()) {
+      const data = snap.data();
+      aplicarContenidoCMS(data);
+      // Actualiza caché local
+      localStorage.setItem('padilla_cms_data', JSON.stringify(data));
+    }
+  } catch (e) {
+    console.warn('No se pudo cargar CMS desde Firestore:', e.message);
+  }
+}
+
+// Aplica los datos del CMS a la UI (pantalla principal + formulario del admin)
+function aplicarContenidoCMS(data) {
+  if (data.title) {
+    document.getElementById('main-monument-title').innerHTML =
+      data.title.replace(' ', '<br>');
+  }
+  if (data.sub) {
+    document.getElementById('main-monument-subtitle').innerText = data.sub;
+  }
+  if (data.desc) {
+    document.getElementById('main-monument-desc').innerHTML =
+      data.desc.replace(/\n/g, '<br><br>');
+  }
+  if (data.img) {
+    document.getElementById('main-monument-img').src = data.img;
+    const prev = document.getElementById('cms-img-preview');
+    prev.src = data.img;
+    prev.style.display = 'block';
+  }
+  // Campos del formulario
+  document.getElementById('cms-title').value    = data.title || '';
+  document.getElementById('cms-subtitle').value = data.sub   || '';
+  document.getElementById('cms-desc').value     = data.desc  || '';
+}
+
+// ============================================================
+// CMS — SUBIDA DE IMAGEN A FIREBASE STORAGE
+// ============================================================
+let cmsImageURL = null; // URL final en Storage (o base64 si falla)
+
+async function subirImagenStorage(input) {
+  if (!input.files || !input.files[0]) return;
+  const file   = input.files[0];
+  const reader = new FileReader();
+
+  reader.onload = async (e) => {
+    const base64 = e.target.result;
+
+    // Previsualización inmediata
+    const prev = document.getElementById('cms-img-preview');
+    prev.src = base64;
+    prev.style.display = 'block';
+
+    // Intentar subir a Storage
+    try {
+      await waitForFirebase();
+      const { stor, ref, uploadString, getDownloadURL } = window._fb;
+
+      // Barra de progreso simulada mientras sube
+      const bar = document.getElementById('upload-progress');
+      bar.classList.add('visible');
+      bar.style.width = '10%';
+
+      const storRef  = ref(stor, 'cms/monumento_' + Date.now() + '.jpg');
+      const progress = setInterval(() => {
+        const w = parseFloat(bar.style.width);
+        if (w < 85) bar.style.width = (w + 10) + '%';
+      }, 300);
+
+      await uploadString(storRef, base64, 'data_url');
+      const url = await getDownloadURL(storRef);
+
+      clearInterval(progress);
+      bar.style.width = '100%';
+      setTimeout(() => { bar.classList.remove('visible'); bar.style.width = '0'; }, 600);
+
+      cmsImageURL = url;
+      document.getElementById('cms-img-preview').src = url;
+      console.log('✅ Imagen subida a Storage:', url);
+
+    } catch (err) {
+      // Si falla Storage, se usa base64 como fallback
+      console.warn('Storage no disponible, usando base64:', err.message);
+      cmsImageURL = base64;
+      document.getElementById('upload-progress').classList.remove('visible');
+    }
+  };
+
+  reader.readAsDataURL(file);
+}
+
+// ============================================================
+// CMS — GUARDAR EN FIRESTORE
+// ============================================================
+async function guardarContenidoCMS() {
+  const btn    = document.getElementById('btn-cms-guardar');
+  const status = document.getElementById('cms-status');
+
+  const data = {
+    title : document.getElementById('cms-title').value.trim()    || 'Almirante Padilla',
+    sub   : document.getElementById('cms-subtitle').value.trim() || 'Héroe Naval',
+    desc  : document.getElementById('cms-desc').value.trim()     || '',
+    img   : cmsImageURL || document.getElementById('main-monument-img').src
+  };
+
+  // Aplicar en pantalla inmediatamente
+  aplicarContenidoCMS(data);
+
+  // Guardar en localStorage como caché offline
+  localStorage.setItem('padilla_cms_data', JSON.stringify(data));
+
+  // UI de carga
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...';
+  mostrarStatusCMS('loading', '<i class="fa-solid fa-spinner cms-spin"></i> Guardando en Firebase...');
+
+  try {
+    await waitForFirebase();
+    const { db, doc, setDoc } = window._fb;
+    await setDoc(doc(db, 'cms', 'monumento'), data);
+
+    mostrarStatusCMS('success', '<i class="fa-solid fa-check-circle"></i> ¡Cambios guardados y sincronizados en todos los dispositivos!');
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> ¡Guardado!';
+    setTimeout(() => {
+      btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar y Sincronizar';
+      btn.disabled  = false;
+    }, 2500);
+
+  } catch (err) {
+    console.error('Error al guardar en Firestore:', err);
+    mostrarStatusCMS('error', '<i class="fa-solid fa-triangle-exclamation"></i> Error al sincronizar. Los cambios se guardaron localmente. Reintenta cuando haya conexión.');
+    btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar y Sincronizar';
+    btn.disabled  = false;
+  }
+}
+
+function mostrarStatusCMS(tipo, html) {
+  const el = document.getElementById('cms-status');
+  el.className = 'cms-status ' + tipo;
+  el.innerHTML = html;
+  el.style.display = 'flex';
+  if (tipo === 'success') {
+    setTimeout(() => { el.style.display = 'none'; }, 4000);
+  }
+}
+
+// ============================================================
+// ACCESO ADMIN (Ctrl+Shift+A en el gateway)
+// Contraseña: Admin123
+// ============================================================
+const ADMIN_COMMAND = 'Admin123';
+
+function abrirCmdOverlay() {
+  const overlay = document.getElementById('cmd-overlay');
+  const input   = document.getElementById('cmd-input');
+  const error   = document.getElementById('cmd-error');
+  error.style.display = 'none';
+  input.value = '';
+  document.getElementById('cmd-lastlogin').innerText = new Date().toLocaleString('en-US', {
+    weekday:'short', month:'short', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false
+  });
+  overlay.style.display = 'flex';
+  setTimeout(() => input.focus(), 100);
+}
+
+function cerrarCmdOverlay() {
+  document.getElementById('cmd-overlay').style.display  = 'none';
+  document.getElementById('cmd-error').style.display   = 'none';
+  document.getElementById('cmd-input').value = '';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+    e.preventDefault();
+    const gateway = document.getElementById('gateway-screen');
+    const visible = gateway && gateway.style.display !== 'none' && !gateway.classList.contains('hidden');
+    if (visible) abrirCmdOverlay();
+  }
+  if (e.key === 'Escape') cerrarCmdOverlay();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const cmdInput = document.getElementById('cmd-input');
+  const cmdError = document.getElementById('cmd-error');
+
+  cmdInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      if (cmdInput.value.trim() === ADMIN_COMMAND) {
+        cerrarCmdOverlay();
+        document.getElementById('admin-screen').style.display = 'flex';
+        // Cargar CMS en el formulario cuando se abre el admin
+        cargarContenidoCMS();
+        iniciarEstadisticas();
+      } else {
+        cmdError.style.display = 'block';
+        cmdInput.value = '';
+      }
+    }
+  });
+
+  document.getElementById('cmd-overlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('cmd-overlay')) cerrarCmdOverlay();
+  });
+});
+
+// ============================================================
+// GATEWAY Y SONIDO NAVAL
+// ============================================================
+let localDB = { visitas: [] };
+const datosPrueba = [
+  { edad:"18 a 25 años", procedencia:"Riohacha",                      tipo_visitante:"Estudiante", fecha:"15/06/2026", hora:"10:30 a. m.", monumento:"Almirante Padilla" },
+  { edad:"26 a 35 años", procedencia:"Extranjero",                    tipo_visitante:"Turista",    fecha:"15/06/2026", hora:"11:15 a. m.", monumento:"Almirante Padilla" },
+  { edad:"36 a 45 años", procedencia:"Otro municipio de La Guajira",  tipo_visitante:"Residente",  fecha:"15/06/2026", hora:"12:05 p. m.", monumento:"Almirante Padilla" }
+];
+
+const sonidoNaval = new Audio('./accion.mp3');
+sonidoNaval.volume = 0.40;
+
+document.getElementById('form-ingreso').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('btn-entrar');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Conectando...';
+
+  sonidoNaval.currentTime = 0;
+  sonidoNaval.play().catch(() => {});
+
+  const registro = {
+    edad           : document.getElementById('v-edad').value,
+    procedencia    : document.getElementById('v-proc').value,
+    tipo_visitante : document.getElementById('v-tipo').value,
+    fecha          : new Date().toLocaleDateString('es-CO'),
+    hora           : new Date().toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit', hour12:true }),
+    monumento      : document.getElementById('main-monument-title').innerText.replace('\n', ' ')
+  };
+
+  if (window._fbReady) {
+    const { db, collection, addDoc, serverTimestamp } = window._fb;
+    addDoc(collection(db, 'visitas_padilla'), { ...registro, ts: serverTimestamp() }).catch(console.warn);
+  } else {
+    localDB.visitas.push(registro);
+  }
+
+  setTimeout(() => {
+    document.getElementById('gateway-screen').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('gateway-screen').style.display = 'none';
+      document.getElementById('app-screen').classList.remove('hidden');
+    }, 400);
+  }, 600);
+});
+
+// ============================================================
+// NAVEGACIÓN
+// ============================================================
+function switchView(viewId, btn) {
+  document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+  document.getElementById(viewId).classList.remove('hidden');
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ============================================================
+// AUDIO (VOZ MASCULINA)
+// ============================================================
+function narrarVozMasculina(btn) {
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    btn.classList.remove('playing');
+    btn.innerHTML = '<i class="fa-solid fa-play" style="margin-left: 4px;"></i>';
+    sonidoNaval.play().catch(() => {});
+    return;
+  }
+  const textoDescriptivo = document.getElementById('main-monument-desc').innerText;
+  const narracion = new SpeechSynthesisUtterance(textoDescriptivo);
+  narracion.lang = 'es-CO';
+  const voces = window.speechSynthesis.getVoices();
+  let vozMasculina = voces.find(v =>
+    v.lang.startsWith('es') &&
+    (v.name.toLowerCase().includes('male') || v.name.includes('Pablo') || v.name.includes('Jorge'))
+  );
+  if (!vozMasculina) vozMasculina = voces.find(v => v.lang.startsWith('es'));
+  if (vozMasculina) narracion.voice = vozMasculina;
+  narracion.pitch = 0.8;
+  narracion.rate  = 0.90;
+  btn.classList.add('playing');
+  btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+  sonidoNaval.pause();
+  narracion.onend = () => {
+    btn.classList.remove('playing');
+    btn.innerHTML = '<i class="fa-solid fa-play" style="margin-left: 4px;"></i>';
+    sonidoNaval.play().catch(() => {});
+  };
+  window.speechSynthesis.speak(narracion);
+}
+window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+
+// ============================================================
+// CHATBOT IA (GROQ)
+// ============================================================
+const GROQ_KEY = "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";
+const promptSistema = `Rol y Personalidad: Eres el "Historiador Virtual", la Inteligencia Artificial experta y guía oficial de esta plataforma interactiva dedicada a los monumentos y la cultura de Riohacha, La Guajira (Colombia). Tu tono es inmersivo, analítico, profundamente educativo y épico. Tu misión es educar a los visitantes sobre la riqueza patrimonial del departamento. Bajo ninguna circunstancia debes usar emojis.
+
+Conocimiento Base:
+- Monumento al Almirante Padilla: Estatua de bronce en la Plaza Padilla. Honra a José Prudencio Padilla (nacido en Camarones, 1784), el héroe naval más grande de Colombia, clave en la Batalla del Lago de Maracaibo (1823).
+- Monumento a la Identidad: Inaugurado en 2011, representa el mestizaje y la fuerza de la cultura Wayuu.
+- Riohacha: "Portal de Perlas". Historia vinculada a la extracción de perlas en el siglo XVI.
+- La Etnia Wayuu: Sociedad matrilineal. Destacan por sus tejidos y el Pütchipü'üi (Palabrero), patrimonio de la humanidad.
+
+Reglas: Solo responde sobre historia de La Guajira, Riohacha, monumentos, cultura Wayuu y turismo. Usa párrafos cortos de 3-4 líneas. Usa **negritas** para fechas clave.`;
+
+let historialChat = [{ role: 'system', content: promptSistema }];
+
+async function consultarIA() {
+  const input = document.getElementById('ai-input');
+  const chat  = document.getElementById('chat-historia');
+  const txt   = input.value.trim();
+  if (!txt) return;
+  input.value = '';
+  chat.innerHTML += `<div class="msg user fade-in">${txt}</div>`;
+  chat.scrollTop  = chat.scrollHeight;
+  const idLoad = 'l-' + Date.now();
+  chat.innerHTML += `<div class="msg bot fade-in" id="${idLoad}"><i class="fa-solid fa-ellipsis fa-fade"></i></div>`;
+  chat.scrollTop  = chat.scrollHeight;
+  historialChat.push({ role: 'user', content: txt });
+  try {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+      body   : JSON.stringify({ model: "llama-3.1-8b-instant", messages: historialChat, temperature: 0.4 })
+    });
+    const data = await res.json();
+    const resp = data.choices[0].message.content;
+    historialChat.push({ role: 'assistant', content: resp });
+    document.getElementById(idLoad).remove();
+    chat.innerHTML += `<div class="msg bot fade-in">${resp.replace(/\n/g, '<br>')}</div>`;
+  } catch (e) {
+    document.getElementById(idLoad).remove();
+    chat.innerHTML += `<div class="msg bot" style="color:#ef4444;">Error de conexión.</div>`;
+  }
+  chat.scrollTop = chat.scrollHeight;
+}
+
+// ============================================================
+// MODAL QR
+// ============================================================
+function abrirModalQR() {
+  const modal     = document.getElementById('modal-qr');
+  const container = document.getElementById('qr-container');
+  const label     = document.getElementById('qr-url-label');
+  container.innerHTML = '';
+  const siteURL = window.location.href.split('?')[0].split('#')[0];
+  label.innerText = siteURL;
+  new QRCode(container, {
+    text         : siteURL,
+    width        : 200,
+    height       : 200,
+    colorDark    : "#0F172A",
+    colorLight   : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+  });
+  modal.style.display = 'flex';
+}
+
+function cerrarModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+function descargarQR() {
+  const canvas = document.querySelector('#qr-container canvas');
+  const img    = document.querySelector('#qr-container img');
+  if (canvas) {
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = 'QR_PadillaApp.png';
+    a.click();
+  } else if (img) {
+    const a = document.createElement('a');
+    a.href = img.src;
+    a.download = 'QR_PadillaApp.png';
+    a.click();
+  } else {
+    alert('El QR aún está cargando, intenta de nuevo.');
+  }
+}
+
+// ============================================================
+// DASHBOARD ADMIN — TABS
+// ============================================================
+function switchAdminTab(tabName, btnElement) {
+  document.querySelectorAll('.admin-sidebar-item').forEach(b => b.classList.remove('active'));
+  btnElement.classList.add('active');
+  ['stats','history','content'].forEach(s => {
+    document.getElementById('admin-section-' + s).classList.add('hidden');
+  });
+  if (tabName === 'stats') {
+    document.getElementById('admin-section-stats').classList.remove('hidden');
+    iniciarEstadisticas();
+  } else if (tabName === 'history') {
+    document.getElementById('admin-section-history').classList.remove('hidden');
+    iniciarEstadisticas();
+  } else if (tabName === 'content') {
+    document.getElementById('admin-section-content').classList.remove('hidden');
+    // Recargar desde Firestore al entrar al CMS
+    cargarContenidoCMS();
+  }
+}
+
+// ============================================================
+// ESTADÍSTICAS — listener Firebase (no duplicado)
+// ============================================================
+let charts = {};
+let _fbUnsubscribe = null;
+
+function iniciarEstadisticas() {
+  if (_fbUnsubscribe) return;
+  if (window._fbReady) {
+    _activarListenerFirebase();
+  } else {
+    const iv = setInterval(() => {
+      if (window._fbReady) { clearInterval(iv); _activarListenerFirebase(); }
+    }, 300);
+  }
+}
+
+function _activarListenerFirebase() {
+  const { db, collection, onSnapshot } = window._fb;
+  _fbUnsubscribe = onSnapshot(
+    collection(db, 'visitas_padilla'),
+    snap => {
+      let data = [];
+      snap.forEach(d => data.push(d.data()));
+      data.sort((a, b) => {
+        if (a.ts && b.ts) return b.ts.seconds - a.ts.seconds;
+        return 0;
+      });
+      if (data.length === 0) data = datosPrueba;
+      calcularEstadisticas(data);
+    },
+    err => {
+      console.warn('Firebase listener error:', err);
+      calcularEstadisticas([...datosPrueba, ...localDB.visitas]);
+    }
+  );
+}
+
+function cerrarAdmin() {
+  document.getElementById('admin-screen').style.display = 'none';
+  if (_fbUnsubscribe) { _fbUnsubscribe(); _fbUnsubscribe = null; }
+}
+
+function calcularEstadisticas(data) {
+  const n = data.length;
+  document.getElementById('k-total').innerText = n;
+
+  const tituloActual     = document.getElementById('main-monument-title').innerText.replace('\n', ' ');
+  const visitasMonumento = data.filter(d => d.monumento === tituloActual).length;
+  document.getElementById('k-monumento').innerText = visitasMonumento > 0 ? visitasMonumento : n;
+
+  let edades = {}, procs = {}, tipos = {};
+  data.forEach(d => {
+    edades[d.edad]           = (edades[d.edad]           || 0) + 1;
+    procs[d.procedencia]     = (procs[d.procedencia]     || 0) + 1;
+    tipos[d.tipo_visitante]  = (tipos[d.tipo_visitante]  || 0) + 1;
+  });
+
+  const getModa = o => Object.keys(o).length
+    ? Object.keys(o).reduce((a, b) => o[a] > o[b] ? a : b)
+    : '-';
+
+  document.getElementById('k-moda-edad').innerText = getModa(edades);
+  document.getElementById('k-moda-proc').innerText = getModa(procs);
+  document.getElementById('k-moda-tipo').innerText = getModa(tipos);
+
+  const ordEdad   = ["Menor de 18 años","18 a 25 años","26 a 35 años","36 a 45 años","46 a 60 años","Mayor de 60 años"];
+  const textColor = isDarkMode ? '#F8FAFC' : '#1E293B';
+  const gridColor = isDarkMode ? '#334155' : '#E2E8F0';
+
+  dibujarGrafico('chart-edades', 'bar', ordEdad, ordEdad.map(k => edades[k] || 0), ['#FF4B2B'], textColor, gridColor);
+  dibujarGrafico('chart-proc', 'doughnut', Object.keys(procs), Object.values(procs), ['#2193b0','#FF4B2B','#6dd5ed','#1E293B'], textColor, gridColor);
+
+  const procKeys     = Object.keys(procs);
+  const colorsPalette = ['#2193b0','#FF4B2B','#6dd5ed','#1E293B'];
+  const datasetsCruce = procKeys.map((pk, i) => ({
+    label           : pk,
+    backgroundColor : colorsPalette[i % 4],
+    data            : ordEdad.map(ed => data.filter(d => d.edad === ed && d.procedencia === pk).length)
+  }));
+
+  if (charts['chart-cruce']) charts['chart-cruce'].destroy();
+  charts['chart-cruce'] = new Chart(document.getElementById('chart-cruce'), {
+    type : 'bar',
+    data : { labels: ordEdad, datasets: datasetsCruce },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { stacked: true, ticks: { color: textColor }, grid: { color: gridColor } },
+        y: { stacked: true, ticks: { color: textColor }, grid: { color: gridColor } }
+      },
+      plugins: { legend: { labels: { color: textColor } } }
+    }
+  });
+
+  // Tabla de frecuencias
+  const tbody = document.getElementById('tabla-frecuencias');
+  tbody.innerHTML = '';
+  const addRows = (obj, varName) => {
+    for (let k in obj) {
+      const fi = obj[k], hi = (fi / n).toFixed(3), pct = ((fi / n) * 100).toFixed(1) + '%';
+      tbody.innerHTML += `<tr>
+        <td><b>${varName}</b></td><td>${k}</td><td>${fi}</td>
+        <td>${hi}</td><td style="color:#FF4B2B; font-weight:700;">${pct}</td>
+      </tr>`;
+    }
+  };
+  addRows(edades, 'Edad');
+  addRows(procs,  'Procedencia');
+  addRows(tipos,  'Perfil');
+
+  // Historial
+  const tbodyReg = document.getElementById('tabla-registros');
+  tbodyReg.innerHTML = '';
+  const ahora = Date.now();
+  data.forEach(d => {
+    const esNuevo = d.ts && (ahora - d.ts.seconds * 1000) < 60000;
+    const badge   = esNuevo
+      ? `<span style="background:#22c55e;color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:6px;">NUEVO</span>`
+      : '';
+    tbodyReg.innerHTML += `<tr style="${esNuevo ? 'background:rgba(34,197,94,0.07);' : ''}">
+      <td>${d.fecha || '-'}</td>
+      <td>${d.hora  || '-'}</td>
+      <td>${d.monumento || '-'}${badge}</td>
+      <td>${d.edad}</td>
+      <td>${d.procedencia}</td>
+      <td>${d.tipo_visitante}</td>
+    </tr>`;
+  });
+}
+
+function dibujarGrafico(id, tipo, labels, data, colores, txtColor, grdColor) {
+  if (charts[id]) charts[id].destroy();
+  let scaleOptions = {};
+  if (tipo === 'bar') {
+    scaleOptions = {
+      x: { ticks: { color: txtColor }, grid: { color: grdColor } },
+      y: { ticks: { color: txtColor }, grid: { color: grdColor } }
+    };
+  }
+  charts[id] = new Chart(document.getElementById(id), {
+    type : tipo,
+    data : { labels, datasets: [{ data, backgroundColor: colores, borderRadius: tipo === 'bar' ? 8 : 0 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, scales: scaleOptions,
+      plugins: { legend: { display: tipo === 'doughnut', labels: { color: txtColor } } }
+    }
+  });
+}
+</script>
+</body>
+</html>
